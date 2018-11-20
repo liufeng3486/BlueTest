@@ -5,11 +5,12 @@ null="null"
 import requests,random,time
 from GreenTest.toolbox import *
 
-def initFolder():
-    mkdir("..//result//")
-    mkdir("..//log//")
-    mkdir("..//data//")
-    mkdir("..//postmandata//")
+
+mkdir("..//log//")
+mkdir("..//result//")
+mkdir("..//srcdata//")
+
+
 
 
 class apiTest(object):
@@ -22,7 +23,7 @@ class apiTest(object):
         mkdir("..//result//")
         with open("..//result//data.txt","a",encoding='utf8') as file:
             file.write("%s \n"%(data))
-        logging.info("%s \n"%(data))
+        log.logger.info("%s \n"%(data))
 
     def soloRequest(self,body=False,urlparams=False):
         error_list = ["error","Error","False","false","失败","错误","异常","禁止"]
@@ -100,7 +101,7 @@ class apiTest(object):
             else:
                 response = self.soloRequest(body=temp)
 
-            logging.debug("key:%s max:%s min:%s cur:%s response:%s"%(key,str(self.max),str(self.min),str(temp_len),response))
+            log.logger.debug("key:%s max:%s min:%s cur:%s response:%s"%(key,str(self.max),str(self.min),str(temp_len),response))
             if response == spec_response:
                 self.max = temp_len
             else:
@@ -111,7 +112,7 @@ class apiTest(object):
                 response = self.soloRequest(urlparams=temp)
             else:
                 response = self.soloRequest(body = temp)
-            logging.debug("finish check:%s response:%s"%(str(i+1),response))
+            log.logger.debug("finish check:%s response:%s"%(str(i+1),response))
             if response != spec_response:
                 if urlparams:
                     self.recordResults("%s urlparams %s:limit:%s \n" % (self.name, str(key), str(i+1)))
@@ -146,7 +147,7 @@ class apiTest(object):
             spec_response = self.soloRequest(urlparams = temp)
         else:
             spec_response = self.soloRequest(temp)
-        logging.debug(temp)
+        log.logger.debug(temp)
         self.recordResults("%s exceptionCheck: %s为空 response:%s" % (self.name, key, spec_response))
         str_temp = "temp"
         for index in range(len(key)-1):
@@ -157,7 +158,7 @@ class apiTest(object):
             spec_response = self.soloRequest(urlparams = temp)
         else:
             spec_response = self.soloRequest(temp)
-        logging.debug(temp)
+        log.logger.debug(temp)
         self.recordResults("%s exceptionCheck: %s不传 response:%s" % (self.name, key, spec_response))
 
     def dataReduction(self,data):
@@ -191,23 +192,51 @@ class apiTest(object):
                     if limit:
                         break
 
-def initPostMan(name,path=False,result_path = ""):
-
+def initPostMan(name,result_path = ""):
+    path = ""
+    result_name = ""
+    if "\\" in name or "/" in name or "//" in name:
+        path = name
     if not result_path:
         if path:
-            result_path = name.split("\\")[-1].split("//")[-1].split("/")[-1].split(".")[0]
+            result_name = name.split("\\")[-1].split("//")[-1].split("/")[-1].split(".")[0]
         else:
-            result_path = name.split(".")[0]
-        result_path = "..\\srcdata\\%s.csv"
-    if not path:
-        pass
+            result_name = name.split(".")[0]
+        result_path = "..\\srcdata\\%s.csv"%result_name
 
-    if not result_path:
-        test = Postman2Csv("..\\postmandata\\%s.json.postman_collection")
+    if not path:
+        test = Postman2Csv("..\\srcdata\\%s.json.postman_collection"%name,resultpath=result_path)
+    else:
+        test = Postman2Csv("..\\srcdata\\%s.json.postman_collection"%name,resultpath=result_path)
+    print (
+        result_path
+    )
+    test.run()
+def testByCsvData(name,normal_test=True,mkpy=False):
+    path = ""
+    if "\\" in name or "/" in name or "//" in name:
+        path = name
+    if not path:
+        test = Csv2Dict("..\\srcdata\\%s.csv"%name)
+    else:
+        test = Csv2Dict(path)
+    d = test.run()
+    if normal_test:
+        for i in d:
+            if mkpy:
+                temp = dict2Py(data=i)
+                temp.mkpy()
+            test = apiTest(i)
+            test.dataReduction(1)
 
 
 if __name__ == '__main__':
-    pass
+
+    # initPostMan("ijx")
+    testByCsvData("ijx")
+    # a = Csv2Dict(debug=True)
+    # d = a.run()
+
     # test = Postman2Csv("..\\postmandata\\")
     # test.run()
     # a =  Csv2Dict(debug=True)

@@ -8,8 +8,10 @@ def mkdir(path):
     folder = os.path.exists(path)
     if not folder:
         os.makedirs(path)
+
 class Postman2Csv(object):
-    def __init__(self,path,resultpath="..//data//temp.csv"):
+
+    def __init__(self,path,resultpath="..//srcdata//temp.csv"):
         self.path = path
         self.resultpath = resultpath #结果路径
         self.header = csv_parm.CHINA_KEY #中文key
@@ -85,27 +87,29 @@ class Postman2Csv(object):
                 temp_list[code_parm.DATA] = solo_data[PostParm.RAWMODEDATA]
             all_data.append(temp_list)
         return all_data
-
+from GreenTest.logInit import *
 class Csv2Dict(object):
+
     def __init__(self,path="..//data//temp.csv",debug=False):
+
         self.debug = debug
         self.path = path
         self.key =  csv_parm.KEY #key
-
     def run(self):
+
         if self.debug:
             data = self.readAll()
             dict_data = self.list2Dict(data)
-            logging.debug("CSV文件内容序列化成功:%s",str(dict_data))
+            log.logger.debug("CSV文件内容序列化成功:%s",str(dict_data))
             return dict_data
         else:
             try:
                 data = self.readAll()
                 dict_data = self.list2Dict(data)
-                logging.debug("CSV文件内容序列化成功:%s", str(dict_data))
+                log.logger.debug("CSV文件内容序列化成功:%s", str(dict_data))
                 return dict_data
             except Exception as ex:
-                logging.error("CSV文件内容序列化失败:%s", str(ex))
+                log.logger.error("CSV文件内容序列化失败:%s", str(ex))
                 return False
 
     def urlParamsDo(self,urlparams_string):
@@ -164,9 +168,9 @@ class dict2Py(object):
     def __init__(self,data=""):
         self.data = data
         self.tab = 0
-        self.path = '..\\postmandata\\'+data[csv_parm.RESUALPATH].split("\\")[1]
+        self.path = '..\\srcdata\\'+data[csv_parm.RESUALPATH].split("\\")[1]
         self.mkdir(self.path)
-        data[csv_parm.RESUALPATH] = '..\\postmandata\\' + data[csv_parm.RESUALPATH] +".py"
+        data[csv_parm.RESUALPATH] = '..\\srcdata\\' + data[csv_parm.RESUALPATH] +".py"
 
     def mkdir(self,path):
         folder = os.path.exists(path)
