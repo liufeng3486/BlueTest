@@ -1,7 +1,13 @@
 import csv,re,os,copy
 # import toolbox
-from logInit import *
-from apitest.parm import *
+from GreenTest.logInit import *
+from GreenTest.parm import *
+
+
+def mkdir(path):
+    folder = os.path.exists(path)
+    if not folder:
+        os.makedirs(path)
 class Postman2Csv(object):
     def __init__(self,path,resultpath="..//data//temp.csv"):
         self.path = path
