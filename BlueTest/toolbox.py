@@ -62,16 +62,22 @@ class Postman2Csv(object):
             if len(url.split("?"))>1:   #包含? 增加 url params
                 url_parm = url.split("?")[-1]
             url = url.split("?")[0] #去除?后内容
-            error_headers = re.findall("\n//.*", solo_data[PostParm.HEADERS])  # //是为了处理postman 中被注释的数据
-            if error_headers:
-                for error_header in error_headers:
-                    solo_data[PostParm.HEADERS] = solo_data[PostParm.HEADERS].replace(error_header, "")
+            try:
+                error_headers = re.findall("\n//.*", solo_data[PostParm.HEADERS])  # //是为了处理postman 中被注释的数据
+                if error_headers:
+                    for error_header in error_headers:
+                        solo_data[PostParm.HEADERS] = solo_data[PostParm.HEADERS].replace(error_header, "")
+            except Exception as es:
+                log.logger.error(es)
 
             if not Cookie:  #不需要cookie
-                cookies = re.findall("Cookie.*",solo_data[PostParm.HEADERS])  #正则并删除cookie
-                if cookies:
-                    for cookie in cookies:
-                        solo_data[PostParm.HEADERS] = solo_data[PostParm.HEADERS].replace(cookie,"")
+                try:
+                    cookies = re.findall("Cookie.*",solo_data[PostParm.HEADERS])  #正则并删除cookie
+                    if cookies:
+                        for cookie in cookies:
+                            solo_data[PostParm.HEADERS] = solo_data[PostParm.HEADERS].replace(cookie,"")
+                except Exception as es:
+                    log.logger.error(es)
             #组装数据
             temp_list = ["", #lv
                          "", #Cname
@@ -90,7 +96,7 @@ class Postman2Csv(object):
                 temp_list[code_parm.DATA] = solo_data[PostParm.RAWMODEDATA]
             all_data.append(temp_list)
         return all_data
-from GreenTest.logInit import *
+from BlueTest.logInit import *
 class Csv2Dict(object):
 
     def __init__(self,path=".//data//temp.csv",debug=False):
@@ -144,6 +150,8 @@ class Csv2Dict(object):
         data_temp = []
         start_list = []
         for index,value in enumerate(data):
+            if not value:
+                continue
             if value == [PostParm.START] or value[0] == PostParm.START:
                 start_list.append(index)
         for index in start_list:
@@ -215,7 +223,6 @@ class Base(object):
         self.temp_map = []
 
     def list_dictionary(self,dictionary, key_list=[]):
-        print("self.temp_map:",self.temp_map)
         if type(dictionary) == type({}):
             for key, value in dictionary.items():
                 self.temp_map.append(key)
@@ -242,7 +249,6 @@ class Base(object):
         for key in key_list:
             for index, value in enumerate(key):
                 if index == 0:
-                    print ("key_list:",key_list)
                     solo = data[value]
                 else:
                     solo = solo[value]
@@ -251,30 +257,11 @@ class Base(object):
         return res_key_list, value_list
     def dataGetKeyAndValue(self,dictionary):
         self.temp_map=[]
-        print("self.tem:",self.temp_map)
         key_list = self.list_dictionary(dictionary,[])
         return self.getValue(dictionary,key_list)
 
 
 
 if __name__ == '__main__':
-    # pass
-    # test = Postman2Csv("..\\postmandata\\ijx.json.postman_collection")
-    # test.run()
 
-    # a =  Csv2Dict(debug=True)
-    # d = a.run()
-    # print (d)
-    # for i in d:
-    #     temp = dict2Py(data = i)
-    #     temp.mkpy()
-    # d = dict2Py(data = d[0])
-    # d.mkpy()
     pass
-    # a = {"date": "2018-11-04 10:21:06", "actions": [{"requestID": "Abac6ban",
-    #                                                  "actionTime": 1542248466944, 111: [22, 33, 444, 555, {222: 777}]},
-    #                                                 333, {2: 2}]}
-    # base = Base()
-    # keys,values = base.dataGetKeyAndValue(a)
-    # for index,value in enumerate(keys):
-    #     print(keys[index],values[index])

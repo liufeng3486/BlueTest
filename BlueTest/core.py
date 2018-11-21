@@ -1,11 +1,14 @@
 # Insert your code here.
 #coding = utf8
-from GreenTest.toolbox import *
+from BlueTest.toolbox import *
 
 
-from GreenTest.logInit import *
+from BlueTest.logInit import *
 null="null"
 import requests,random,time
+
+
+
 
 
 class apiTest(object):
@@ -118,18 +121,6 @@ class apiTest(object):
                 return i
         return False
 
-    # def exceptionCheck(self,body,key,data=""):
-    #     temp2 = copy.copy(self.data)
-    #
-    #     temp = copy.copy(body)
-    #     print ("key:",key)
-    #     temp2[key] = ""
-    #     spec_response = self.soloRequest(temp)
-    #     self.recordResults("%s exceptionCheck: %s为空 response:%s"%(self.name,key,spec_response))
-    #     temp.pop(key)
-    #     spec_response = self.soloRequest(temp)
-    #     self.recordResults("%s exceptionCheck: %s不传 response:%s" % (self.name,key, spec_response))
-
     def exceptionCheck(self, body, key, urlparams=False):
 
         temp = copy.deepcopy(body)
@@ -197,25 +188,26 @@ def initPostMan(name,result_path = ""):
             result_name = name.split("\\")[-1].split("//")[-1].split("/")[-1].split(".")[0]
         else:
             result_name = name.split(".")[0]
-        result_path = "..\\srcdata\\%s.csv"%result_name
+        result_path = ".\\srcdata\\%s.csv"%result_name
 
     if not path:
-        test = Postman2Csv("..\\srcdata\\%s.json.postman_collection"%name,resultpath=result_path)
+        test = Postman2Csv(".\\srcdata\\%s.json.postman_collection"%name,resultpath=result_path)
     else:
-        test = Postman2Csv("..\\srcdata\\%s.json.postman_collection"%name,resultpath=result_path)
-    print (
-        result_path
-    )
+        test = Postman2Csv(".\\srcdata\\%s.json.postman_collection"%name,resultpath=result_path)
+
     test.run()
 def testByCsvData(name,normal_test=True,mkpy=False):
     path = ""
     if "\\" in name or "/" in name or "//" in name:
         path = name
     if not path:
-        test = Csv2Dict("..\\srcdata\\%s.csv"%name)
+        test = Csv2Dict(".\\srcdata\\%s.csv"%name)
     else:
         test = Csv2Dict(path)
     d = test.run()
+    if not d:
+        log.logger.error("CSV文件内容序列化失败")
+        return False
     if normal_test:
         for i in d:
             if mkpy:
@@ -224,39 +216,7 @@ def testByCsvData(name,normal_test=True,mkpy=False):
             test = apiTest(i)
             test.dataReduction(1)
 
-import requests
-requests.request()
 if __name__ == '__main__':
     pass
-    # initPostMan("ijx")
-    # testByCsvData("ijx")
-    # a = Csv2Dict(debug=True)
-    # d = a.run()
 
-    # test = Postman2Csv("..\\postmandata\\")
-    # test.run()
-    # a =  Csv2Dict(debug=True)
-    # d = a.run()
-    # for i in d:
-    #     temp = dict2Py(data=i)
-    #     # temp.mkpy()
-    #     test = apiTest(i)
-    #     test.dataReduction(1)
-    # print (d)
-    # for i in d:
-    #     temp = dict2Py(data = i)
-    #     temp.mkpy()
-
-    # d = dict2Py(data = d[0])
-    # d.mkpy()
-    #
-    #
-    #
-    # a =  Csv2Dict(debug=True)
-    # d = a.run()
-    # print (d )
-    # test = apiTest(d[2])
-    # # print (test.data)
-    # test.dataReduction(1)
-    # test.getData(".\\postmandata\\ijx.json.postman_collection")
 
