@@ -1,5 +1,5 @@
 # 简介
-:smile:几个本质懒到家，却被工作压迫的人。为了降低自己的工作量，拍脑袋决定编写一个让小白也可以使用的测试库。一切的出发点都是几个懒人在实际工作中遇到的问题和场景。做这一切的目的是为了少做事。:smile:
+:waxing_gibbous_moon:几个本质懒到家，却被工作压迫的人。为了降低自己的工作量，拍脑袋决定编写一个让小白也可以使用的测试库。一切的出发点都是几个懒人在实际工作中遇到的问题和场景。做这一切的目的是为了少做事。:waning_gibbous_moon:
 # 功能介绍
 ## 接口测试
 > 参数模板 下文的介绍中会使用该模板进行说明
@@ -63,7 +63,8 @@ https://pypi.org/project/BlueTest/
 
 # 使用说明及范例
 
-##范例
+## 范例
+
 ```python
 └─Project
         test1.py
@@ -89,7 +90,7 @@ BlueTest.test()
             log.py
 ```
 
-##使用说明
+## 使用说明
 ```python
 import BlueTest
 BlueTest.initPostMan("test") #执行完成会生成相应csv文件
@@ -110,7 +111,9 @@ BlueTest.testByCsvData("test",normal_test=True) #进行接口基础验证
 BlueTest.testByCsvData("test",normal_test=Fasle) #不进行接口基础验证
 BlueTest.testByCsvData("test",mkpy=True) #生成接口py文件范例如下
 ```
->import requests
+---
+```python
+import requests
 url = "https://nbrecsys.4paradigm.com/action/api/log"
 querystring = {'requestID': 'Abac6ban', 'clientToken': '1f9d3d10b0ab404e86c2e61a935d3888'}
 payload = {"date":"2018-11-04 10:21:06","actions":[{"requestID":"2222","actionTime":1542248466944,"action":"show","sceneId":420,"userId":"xubyCjC6zO","itemId":"user_define","itemSetId":"39","uuid_tt_dd":"10_28867322960-222-222","specialType":"csdn_net_alliance_ads","ads":1}]}
@@ -123,8 +126,9 @@ headers ={'Origin': ' https://blog.csdn.net',
 	 'Accept-Language': ' zh-CN,zh;q=0.8'}
 response = requests.request("POST", url, params=querystring,data=payload,)
 print(response.text)
+```
 
-其他功能详见源码
+其他功能详见源码 :gun:
 
 
 
