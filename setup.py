@@ -12,7 +12,7 @@ from shutil import rmtree
 from setuptools import find_packages, setup, Command
 
 # Package meta-data.
-NAME = 'BuleTest'
+NAME = 'BlueTest'
 DESCRIPTION = 'My short description for my project.'
 URL = 'https://github.com/liufeng3486/BlueTest.git'
 EMAIL = '34862933@qq.com'

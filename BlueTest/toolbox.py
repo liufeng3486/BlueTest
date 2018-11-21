@@ -7,8 +7,8 @@ def mkdir(path):
 mkdir(".//log//")
 mkdir(".//result//")
 mkdir(".//srcdata//")
-from GreenTest.logInit import *
-from GreenTest.parm import *
+from BlueTest.logInit import *
+from BlueTest.parm import *
 
 
 
