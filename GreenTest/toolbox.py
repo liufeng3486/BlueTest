@@ -1,17 +1,20 @@
 import csv,re,os,copy
 # import toolbox
-from GreenTest.logInit import *
-from GreenTest.parm import *
-
-
 def mkdir(path):
     folder = os.path.exists(path)
     if not folder:
         os.makedirs(path)
+mkdir(".//log//")
+mkdir(".//result//")
+mkdir(".//srcdata//")
+from GreenTest.logInit import *
+from GreenTest.parm import *
+
+
 
 class Postman2Csv(object):
 
-    def __init__(self,path,resultpath="..//srcdata//temp.csv"):
+    def __init__(self,path,resultpath=".//srcdata//temp.csv"):
         self.path = path
         self.resultpath = resultpath #结果路径
         self.header = csv_parm.CHINA_KEY #中文key
@@ -90,7 +93,7 @@ class Postman2Csv(object):
 from GreenTest.logInit import *
 class Csv2Dict(object):
 
-    def __init__(self,path="..//data//temp.csv",debug=False):
+    def __init__(self,path=".//data//temp.csv",debug=False):
 
         self.debug = debug
         self.path = path
@@ -168,9 +171,9 @@ class dict2Py(object):
     def __init__(self,data=""):
         self.data = data
         self.tab = 0
-        self.path = '..\\srcdata\\'+data[csv_parm.RESUALPATH].split("\\")[1]
+        self.path = '.\\srcdata\\'+data[csv_parm.RESUALPATH].split("\\")[1]
         self.mkdir(self.path)
-        data[csv_parm.RESUALPATH] = '..\\srcdata\\' + data[csv_parm.RESUALPATH] +".py"
+        data[csv_parm.RESUALPATH] = '.\\srcdata\\' + data[csv_parm.RESUALPATH] +".py"
 
     def mkdir(self,path):
         folder = os.path.exists(path)

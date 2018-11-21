@@ -1,16 +1,11 @@
 # Insert your code here.
 #coding = utf8
-from GreenTest.logInit import *
-null="null"
-import requests,random,time
 from GreenTest.toolbox import *
 
 
-mkdir("..//log//")
-mkdir("..//result//")
-mkdir("..//srcdata//")
-
-
+from GreenTest.logInit import *
+null="null"
+import requests,random,time
 
 
 class apiTest(object):
@@ -20,8 +15,8 @@ class apiTest(object):
         self.max = 10000
 
     def recordResults(self,data):
-        mkdir("..//result//")
-        with open("..//result//data.txt","a",encoding='utf8') as file:
+        mkdir(".//result//")
+        with open(".//result//data.txt","a",encoding='utf8') as file:
             file.write("%s \n"%(data))
         log.logger.info("%s \n"%(data))
 
@@ -229,11 +224,12 @@ def testByCsvData(name,normal_test=True,mkpy=False):
             test = apiTest(i)
             test.dataReduction(1)
 
-
+import requests
+requests.request()
 if __name__ == '__main__':
-
+    pass
     # initPostMan("ijx")
-    testByCsvData("ijx")
+    # testByCsvData("ijx")
     # a = Csv2Dict(debug=True)
     # d = a.run()
 
