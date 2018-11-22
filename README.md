@@ -1,3 +1,88 @@
+# About
+A basic library could decrease the workload.Most of the problem solved in a real testing job.
+# Function info
+## interface test
+> parameter template 
+url = "https://test/api/log?requestID=testid&clientToken=testtoken" body ={"date": "2018-11-04 10:10:10", "actions": [{"actionTime": 1542248466944,"note"]}}
+### interface basic verification
+---
+   verification of the value of parameter is null
+---
+verification of the parameter in a GET method restful interface link, such as requestID: 
+>url = "https://test/api/log?requestID=&clientToken=testtoken"
+
+verification of request body in a POST restful interface, type of the body, such as form or raw will self adapted.
+e.g
+>body ={"date": "",
+	"actions": [{"actionTime": 1542248466944,"note"]}}
+
+>body ={"date": "2018-11-04 10:10:10",
+	"actions": [{"actionTime": "","note"]}}
+
+the value of parameter is ""
+----
+	verification of null parameter
+----
+
+verification of the parameter in a GET method restful interface link, such as requestID: 
+>url = "https://test/api/log?clientToken=testtoken"
+
+verification of request body in a POST restful interface, type of the body, such as form or raw will self adapted.
+e.g
+>body ={
+	"actions": [{"actionTime": 1542248466944,"note"]}}
+
+>body ={"date": "2018-11-04 10:10:10",
+	"actions": [{"note"]}}
+
+	verification of length of parameter
+----
+ range of the length is 1 to 100000。
+
+----
+
+
+>performance test of interface
+coming soon
+UI automatic test
+
+
+# how to install
+ `pip install BlueTest`
+
+or
+
+https://pypi.org/project/BlueTest/
+
+# Usage and examples
+
+## example
+
+```python
+└─Project
+        test1.py
+```
+test1.py：
+```python
+import BlueTest
+BlueTest.test()
+```
+---
+```python
+└─Project
+│  test1.py
+├─log
+│      all.log #log
+│      error.log #error log
+├─result #reuslt
+│      data.txt
+└─srcdata
+    │  test.csv  #postman serialize
+    │  test.json.postman_collection #postman example
+    └─api #generated .py file according postman
+            log.py
+```
+
 # 简介
 :waxing_gibbous_moon:几个本质懒到家，却被工作压迫的人。为了降低自己的工作量，拍脑袋决定编写一个让小白也可以使用的测试库。一切的出发点都是几个懒人在实际工作中遇到的问题和场景。做这一切的目的是为了少做事。:waning_gibbous_moon:
 # 功能介绍
