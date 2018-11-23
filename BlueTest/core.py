@@ -18,8 +18,8 @@ class apiTest(object):
         self.max = 10000
 
     def recordResults(self,data):
-        mkdir(".//result//")
-        with open(".//result//data.txt","a",encoding='utf8') as file:
+        mkdir("./result/")
+        with open("./result/data.txt","a",encoding='utf8') as file:
             file.write("%s \n"%(data))
         log.logger.info("%s \n"%(data))
 
@@ -188,12 +188,12 @@ def initPostMan(name,result_path = ""):
             result_name = name.split("\\")[-1].split("//")[-1].split("/")[-1].split(".")[0]
         else:
             result_name = name.split(".")[0]
-        result_path = ".\\srcdata\\%s.csv"%result_name
+        result_path = "./srcdata/%s.csv"%result_name
 
     if not path:
-        test = Postman2Csv(".\\srcdata\\%s.json.postman_collection"%name,resultpath=result_path)
+        test = Postman2Csv("./srcdata/%s.json.postman_collection"%name,resultpath=result_path)
     else:
-        test = Postman2Csv(".\\srcdata\\%s.json.postman_collection"%name,resultpath=result_path)
+        test = Postman2Csv(path,resultpath=result_path)
 
     test.run()
 def testByCsvData(name,normal_test=True,mkpy=False):
@@ -201,7 +201,7 @@ def testByCsvData(name,normal_test=True,mkpy=False):
     if "\\" in name or "/" in name or "//" in name:
         path = name
     if not path:
-        test = Csv2Dict(".\\srcdata\\%s.csv"%name)
+        test = Csv2Dict("./srcdata/%s.csv"%name)
     else:
         test = Csv2Dict(path)
     d = test.run()

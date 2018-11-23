@@ -4,9 +4,9 @@ def mkdir(path):
     folder = os.path.exists(path)
     if not folder:
         os.makedirs(path)
-mkdir(".//log//")
-mkdir(".//result//")
-mkdir(".//srcdata//")
+mkdir("./log/")
+mkdir("./result/")
+mkdir("./srcdata/")
 from BlueTest.logInit import *
 from BlueTest.parm import *
 
@@ -14,7 +14,7 @@ from BlueTest.parm import *
 
 class Postman2Csv(object):
 
-    def __init__(self,path,resultpath=".//srcdata//temp.csv"):
+    def __init__(self,path,resultpath="./srcdata/temp.csv"):
         self.path = path
         self.resultpath = resultpath #结果路径
         self.header = csv_parm.CHINA_KEY #中文key
@@ -83,7 +83,7 @@ class Postman2Csv(object):
                          "", #Cname
                          url_list[-1], #name
                          solo_data[PostParm.NAME], #Describe
-                         ".\\"+url_list[-2]+"\\"+url_list[-1],#ResualPath
+                         "./"+url_list[-2]+"/"+url_list[-1],#ResualPath
                          solo_data[PostParm.METHOD],#method
                          url, #url
                          solo_data[PostParm.HEADERS],#headers
@@ -99,7 +99,7 @@ class Postman2Csv(object):
 from BlueTest.logInit import *
 class Csv2Dict(object):
 
-    def __init__(self,path=".//data//temp.csv",debug=False):
+    def __init__(self,path="./data/temp.csv",debug=False):
 
         self.debug = debug
         self.path = path
@@ -179,9 +179,9 @@ class dict2Py(object):
     def __init__(self,data=""):
         self.data = data
         self.tab = 0
-        self.path = '.\\srcdata\\'+data[csv_parm.RESUALPATH].split("\\")[1]
+        self.path = './srcdata/'+data[csv_parm.RESUALPATH].split("/")[1]
         self.mkdir(self.path)
-        data[csv_parm.RESUALPATH] = '.\\srcdata\\' + data[csv_parm.RESUALPATH] +".py"
+        data[csv_parm.RESUALPATH] = './srcdata/' + data[csv_parm.RESUALPATH] +".py"
 
     def mkdir(self,path):
         folder = os.path.exists(path)

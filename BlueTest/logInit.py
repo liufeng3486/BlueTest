@@ -22,8 +22,8 @@ class Logger(object):
         self.logger.addHandler(th)
 
 
-log = Logger('.//log//all.log',level='debug')
-Logger('.//log//error.log', level='error')
+log = Logger('./log/all.log',level='debug')
+Logger('./log/error.log', level='error')
 
 if __name__ == '__main__':
     pass
