@@ -51,7 +51,7 @@ class Postman2Csv(object):
         false = PostParm.FALSE    #初始化特殊字符
         true = PostParm.TRUE
         null = PostParm.NULL
-        with open(self.path,"r") as file: #读取文件会获取dict格式
+        with open(self.path,"r",encoding='utf8') as file: #读取文件会获取dict格式
             data = file.read()
             data = eval(data)[PostParm.REQUESTS]
         all_data = []
@@ -141,7 +141,7 @@ class Csv2Dict(object):
 
     def readAll(self):
         temp_list = []
-        with open(self.path, newline='') as csvfile:
+        with open(self.path, newline='',encoding='utf8') as csvfile:
             spamreader = csv.reader(csvfile,dialect='excel')
             for solo in spamreader:
                 temp_list.append(solo)
@@ -192,7 +192,7 @@ class dict2Py(object):
 
 
     def write(self,data):
-        with open(self.data[csv_parm.RESUALPATH],"a") as file:
+        with open(self.data[csv_parm.RESUALPATH],"a",encoding='utf8') as file:
             file.write("\t"*self.tab+data+"\n\n")
     def mkpy(self):
         querystring = False
