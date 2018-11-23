@@ -140,12 +140,27 @@ class Csv2Dict(object):
         return  data
 
     def readAll(self):
-        temp_list = []
-        with open(self.path, newline='',encoding='utf8') as csvfile:
-            spamreader = csv.reader(csvfile,dialect='excel')
-            for solo in spamreader:
-                temp_list.append(solo)
-        return temp_list
+
+        print ("readall")
+        try:
+            temp_list = []
+            with open(self.path, newline='',encoding='utf8') as csvfile:
+                spamreader = csv.reader(csvfile,dialect='excel')
+                for solo in spamreader:
+                    temp_list.append(solo)
+            return temp_list
+        except Exception as es:
+            log.logger.debug("CSV文件内容utf8序列化失败重试:%s", str(es))
+        try:
+            temp_list = []
+            with open(self.path, newline='') as csvfile:
+                spamreader = csv.reader(csvfile,dialect='excel')
+                for solo in spamreader:
+                    temp_list.append(solo)
+            return temp_list
+        except Exception as es:
+            log.logger.debug("CSV文件内容序列化失败:%s",str(es))
+
     def list2Dict(self,data):
         data_temp = []
         start_list = []
