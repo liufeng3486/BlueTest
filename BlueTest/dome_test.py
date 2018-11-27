@@ -40,6 +40,20 @@ def test():
         # time.sleep(1)
     BlueTest.initPostMan("test")
     BlueTest.testByCsvData("test")
+def presstest():
+    temp = ["temp1", "temp2", "temp3"]
+    class press_2(BlueTest.SoloPress):
+        def setup(self):
+            self.num = temp[self.index - 1]
+            self.count = 20
+
+        def runcase(self):
+            self.file_write(self.num)
+            print(self.name, self.num)
+
+    press = BlueTest.Press(2)
+    press.run(press_2)
+
 if __name__ == '__main__':
 
     test()

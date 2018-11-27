@@ -4,10 +4,7 @@ import time,random
 import BlueTest
 
 class SoloPress(threading.Thread):
-    def file_write(self,path, temp):
-        temp = str(time.time())+"\t"+temp
-        with open("./result/" + str(path), "a+", encoding='utf8') as file:
-            file.write(temp + "\n")
+
     def __init__(self,lock,index="",path="",count=100):
         threading.Thread.__init__(self)
         if not path:
@@ -18,6 +15,11 @@ class SoloPress(threading.Thread):
         self.path = path
         self.count = count
         self.lock = lock
+    def file_write(self,temp):
+        path = self.path
+        temp = str(time.time())+"\t"+str(temp)
+        with open(str(path), "a+", encoding='utf8') as file:
+            file.write(temp + "\n")
     def setup(self):
         pass
 
@@ -39,7 +41,7 @@ class SoloPress(threading.Thread):
                     self.lock.release()
                 self.runcase()
             except Exception as es:
-                self.file_write(self.index,str(es))
+                self.file_write(str(self.index)+"\t"+str(es))
 
 class Press(object):
     def __init__(self,num,step=1):
