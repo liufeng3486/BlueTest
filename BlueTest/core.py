@@ -16,6 +16,10 @@ class apiTest(object):
         self.data = data
         self.min = 5
         self.max = 10000
+        self.headers = self.data[csv_parm.HEADERS]
+        self.url = self.data[csv_parm.URL]
+        self.method = self.data[csv_parm.METHOD]
+        self.name = self.data[csv_parm.NAME]
 
     def recordResults(self,data):
         mkdir("./result/")

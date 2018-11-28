@@ -15,9 +15,11 @@ class SoloPress(threading.Thread):
         self.path = path
         self.count = count
         self.lock = lock
-    def file_write(self,temp):
+    def file_write(self,*args):
         path = self.path
-        temp = str(time.time())+"\t"+str(temp)
+        temp = str(time.time())+"\t"
+        for solo in args:
+            temp +="\t" + str(solo)
         with open(str(path), "a+", encoding='utf8') as file:
             file.write(temp + "\n")
     def setup(self):

@@ -46,7 +46,6 @@ def presstest():
         def setup(self):
             self.num = temp[self.index - 1]
             self.count = 20
-
         def runcase(self):
             self.file_write(self.num)
             print(self.name, self.num)
@@ -55,5 +54,5 @@ def presstest():
     press.run(press_2)
 
 if __name__ == '__main__':
-
-    test()
+    pass
+    # test()
