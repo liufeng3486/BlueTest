@@ -1,23 +1,27 @@
 import requests
 import threading
 import time,random
-import BlueTest
+from BlueTest.parm import *
+import BlueTest.toolbox as toolbox
 
 class SoloPress(threading.Thread):
 
     def __init__(self,lock,index="",path="",count=100):
         threading.Thread.__init__(self)
         if not path:
-            path = "./result/%s.txt"%str(index)
+            path = MainParam.Result_Path+MainParam.Press_File+str(index)+".txt"
+            # path = "./result/Press_%s.txt"%str(index)
         if not index:
             index = self.name.split("-")[-1]
         self.index = index
         self.path = path
         self.count = count
         self.lock = lock
+    # def assertResponse(self,data):
+    #     for error in self
     def file_write(self,*args):
         path = self.path
-        temp = str(time.time())+"\t"
+        temp = str(int(time.time()))+"\t"
         for solo in args:
             temp +="\t" + str(solo)
         with open(str(path), "a+", encoding='utf8') as file:
@@ -36,12 +40,16 @@ class SoloPress(threading.Thread):
         percent = self.precentCount(0)
         for i in range(self.count):
             try:
-                if self.precentCount(i) != percent:
+                if self.precentCount(i) < 1:
+                    print("index:%s, run:%.2f%% ,num:%d" % (self.index, int(((i+1)/(self.count))*10000)/100.0, i + 1))
+                if self.precentCount(i) != percent :
                     if self.lock.acquire():
                         percent =  self.precentCount(i)
                         print ("index:%s, run:%d%% ,num:%d"%(self.index,percent,i+1))
                     self.lock.release()
+                self.start = time.time()
                 self.runcase()
+                self.file_write(MainParam.USETIME+"_"+str(int((time.time()-self.start)*1000)))
             except Exception as es:
                 self.file_write(str(self.index)+"\t"+str(es))
 
@@ -49,6 +57,53 @@ class Press(object):
     def __init__(self,num,step=1):
         self.num = num
         self.step = step
+    def dataReduction(self,path = MainParam.Result_Path):
+        time_start = 9543468905
+        press_files = toolbox.getFilePath(path, spec_str=MainParam.Press_File)
+        time_dict = {}
+        temp_resualt_dict = {}
+        resualt_dict = {}
+        for press_file in press_files:
+            with open( MainParam.Result_Path + press_file, "r", encoding='utf8') as file:
+                for line in file.readlines():
+                    line = line.replace("\n", "")
+                    temp_list = line.split("\t")
+                    try:
+                        if float(temp_list[0]) < time_start:
+                            time_start = temp_list[0]
+                    except:
+                        pass
+                    if MainParam.USETIME in  line:
+                        for i in temp_list:
+                            if MainParam.USETIME in i:
+                                try:
+                                    time_dict[i.split("_")[-1]] += 1
+                                except:
+                                    time_dict[i.split("_")[-1]] = 1
+                    if MainParam.RESPONSE_TRUE in line:
+                        try:
+                            temp_resualt_dict[temp_list[0]][0] += 1
+                        except:
+                            temp_resualt_dict[temp_list[0]] = [1, 0]
+                    if MainParam.RESPONSE_FALSE in line:
+                        try:
+                            temp_resualt_dict[temp_list[0]][1] += 1
+                        except:
+                            temp_resualt_dict[temp_list[0]] = [0, 1]
+        for key, value in temp_resualt_dict.items():
+            resualt_dict[int(key) - int(time_start)] = value
+        resualt_path = path+MainParam.RESUALT_CSV
+        toolbox.csvWrite(MainParam.RRESS_RESUALT_HEADER,resualt_path)
+        for key,value in resualt_dict.items():
+            toolbox.csvWrite([key, value[0],value[1]], resualt_path)
+
+        time_path = path+MainParam.TIME_CSV
+        toolbox.csvWrite(MainParam.PRESS_TIME_HEADER,time_path)
+        for key,value in time_dict.items():
+            toolbox.csvWrite([key, value], time_path)
+
+        return resualt_dict, time_dict
+
     def setup(self,solo_thread,index):
         solo_thread.setup(index)
 
@@ -63,7 +118,7 @@ class Press(object):
             t.start()
         for t in ThreadList:
             t.join()
-        print("fuck")
+
 
 
 if "__main__" == __name__:

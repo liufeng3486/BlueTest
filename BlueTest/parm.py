@@ -1,4 +1,15 @@
 RAW = "raw"
+class MainParam:
+    Result_Path = "./result/"
+    Press_File = "Press_"
+    USETIME = "USETIME"
+    RESPONSE_TRUE = "RESPONSE_TRUE"
+    RESPONSE_FALSE = "RESPONSE_FALSE"
+    RESUALT_CSV = "resualt.csv"
+    TIME_CSV = "time.csv"
+    RRESS_RESUALT_HEADER = ["时间","成功","失败"]
+    PRESS_TIME_HEADER = ["耗时","数量"]
+    ERROR_LIST = ["error","Error","False","false","失败","错误","异常","禁止"]
 class PostParm:
     FALSE = False
     TRUE = True

@@ -275,8 +275,42 @@ class Base(object):
         key_list = self.list_dictionary(dictionary,[])
         return self.getValue(dictionary,key_list)
 
+#1返回当前目录下非目录子文件 , spec_str 符合特定规则
+def getFilePath(path,mode=1,spec_str=""):
+    if mode == 1:
+        for root, dirs, files in os.walk(path):
+            if root == path:
+            # print(root, end=' ')  # 当前目录路径
+            # print(dirs, end=' ')  # 当前路径下的所有子目录
+                if  spec_str:
+                    temp_files = []
+                    for file in files:
+                        if spec_str in file:
+                            temp_files.append(file)
+                    return temp_files
+                else:
+                    return(files)  # 当前目录下的所有非目录子文件
+    else:
+        raise "mode error"
+
+#csv写单行
+def csvWrite(data,path): #写单行
+    with open(path, 'a', newline='') as csvfile:
+        spamwriter = csv.writer(csvfile,dialect='excel')
+        spamwriter.writerow(data)
+#打印csv内容
+def printCsv(path): #打印csv现有内容
+    with open(path, newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+        for row in spamreader:
+            print(', '.join(row))
+def responseAssert(data,error_list=MainParam.ERROR_LIST):
+    for error in error_list:
+        if error in str(data):
+            return "RESPONSE_FALSE"
+    return "RESPONSE_TRUE"
 
 
 if __name__ == '__main__':
-
+    getFilePath("./")
     pass

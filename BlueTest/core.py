@@ -20,15 +20,22 @@ class apiTest(object):
         self.url = self.data[csv_parm.URL]
         self.method = self.data[csv_parm.METHOD]
         self.name = self.data[csv_parm.NAME]
+        self.error_list = ["error","Error","False","false","失败","错误","异常","禁止"]
 
     def recordResults(self,data):
         mkdir("./result/")
         with open("./result/data.txt","a",encoding='utf8') as file:
             file.write("%s \n"%(data))
         log.logger.info("%s \n"%(data))
-
+    def responseAssert(self,data,error_list=False):
+        if not error_list:
+            error_list = self.error_list
+        for error in self.error_list:
+            if error in str(data):
+                return "RESPONSE_FALSE"
+        return "RESPONSE_TRUE"
     def soloRequest(self,body=False,urlparams=False):
-        error_list = ["error","Error","False","false","失败","错误","异常","禁止"]
+        error_list = self.error_list
         time.sleep(1)
 
         querystring = False

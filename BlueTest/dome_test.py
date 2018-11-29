@@ -1,6 +1,6 @@
 null = "null"
 # from BlueTest.logInit import *
-import BlueTest,time
+import BlueTest,time,random
 
 def test():
     with open(".//srcdata//test.json.postman_collection","w") as file:
@@ -47,11 +47,30 @@ def presstest():
             self.num = temp[self.index - 1]
             self.count = 20
         def runcase(self):
-            self.file_write(self.num)
-            print(self.name, self.num)
-
+            response = random.choice(["成功","失败"])
+            self.file_write(str(self.num), response, BlueTest.toolbox.responseAssert(response))
     press = BlueTest.Press(2)
     press.run(press_2)
+    press.dataReduction()
+def pressTestByCsv():
+    a = BlueTest.Csv2Dict(path="./srcdata/test.csv")
+    a = a.run()
+    b = BlueTest.apiTest(a[0])
+    b.error_list = ["error", "Error", "False", "false", "失败", "错误", "异常", "禁止"]
+    temp = ["temp1", "temp2", "temp3"]
+    class press_2(BlueTest.SoloPress):
+        def setup(self):
+            self.num = temp[self.index-1]
+            self.count = 20
+
+        def runcase(self):
+            response = b.soloRequest()
+            #dothing ....
+            self.file_write(str(self.num),response,b.responseAssert(response))
+            # print (self.name,self.num)
+    press= BlueTest.Press(2)
+    press.run(press_2)
+    press.dataReduction()
 
 if __name__ == '__main__':
     pass
