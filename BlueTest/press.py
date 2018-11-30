@@ -22,7 +22,7 @@ class SoloPress(threading.Thread):
     #     for error in self
     def file_write(self,*args):
         path = self.path
-        temp = str(datetime.datetime.fromtimestamp(time.time()))+"\t"
+        temp = str(datetime.datetime.fromtimestamp(int(time.time())))+"\t"
         for solo in args:
             temp +="\t" + str(solo).replace("\n","")
         with open(str(path), "a+", encoding='utf8') as file:
