@@ -3,6 +3,7 @@ import threading
 import time,random
 from BlueTest.parm import *
 import BlueTest.toolbox as toolbox
+import datetime
 
 class SoloPress(threading.Thread):
 
@@ -21,9 +22,9 @@ class SoloPress(threading.Thread):
     #     for error in self
     def file_write(self,*args):
         path = self.path
-        temp = str(int(time.time()))+"\t"
+        temp = str(datetime.datetime.fromtimestamp(time.time()))+"\t"
         for solo in args:
-            temp +="\t" + str(solo)
+            temp +="\t" + str(solo).replace("\n","")
         with open(str(path), "a+", encoding='utf8') as file:
             file.write(temp + "\n")
     def setup(self):
@@ -58,7 +59,6 @@ class Press(object):
         self.num = num
         self.step = step
     def dataReduction(self,path = MainParam.Result_Path):
-        time_start = 9543468905
         press_files = toolbox.getFilePath(path, spec_str=MainParam.Press_File)
         time_dict = {}
         temp_resualt_dict = {}
@@ -68,11 +68,6 @@ class Press(object):
                 for line in file.readlines():
                     line = line.replace("\n", "")
                     temp_list = line.split("\t")
-                    try:
-                        if float(temp_list[0]) < time_start:
-                            time_start = temp_list[0]
-                    except:
-                        pass
                     if MainParam.USETIME in  line:
                         for i in temp_list:
                             if MainParam.USETIME in i:
@@ -91,7 +86,7 @@ class Press(object):
                         except:
                             temp_resualt_dict[temp_list[0]] = [0, 1]
         for key, value in temp_resualt_dict.items():
-            resualt_dict[int(key) - int(time_start)] = value
+            resualt_dict[key] = value
         resualt_path = path+MainParam.RESUALT_CSV
         toolbox.csvWrite(MainParam.RRESS_RESUALT_HEADER,resualt_path)
         for key,value in resualt_dict.items():

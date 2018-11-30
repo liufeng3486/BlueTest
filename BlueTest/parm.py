@@ -9,7 +9,16 @@ class MainParam:
     TIME_CSV = "time.csv"
     RRESS_RESUALT_HEADER = ["时间","成功","失败"]
     PRESS_TIME_HEADER = ["耗时","数量"]
-    ERROR_LIST = ["error","Error","False","false","失败","错误","异常","禁止"]
+    ERROR_LIST = ["error","Error","False","false","失败","错误","异常","禁止"
+                 "Max retries exceeded with url",
+                  "500 Internal Server Error</title>",
+                  "RemoteDisconnected(",
+                  "ConnectionAbortedError(",
+                  "WinError 10048",
+                  "ConnectionResetError("
+                  ]
+
+
 class PostParm:
     FALSE = False
     TRUE = True
