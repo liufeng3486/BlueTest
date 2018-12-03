@@ -83,6 +83,51 @@ BlueTest.test()
             log.py
 ```
 
+## Usage
+```python
+import BlueTest
+#This will produce the csv file for test case
+BlueTest.initPostMan("test") 
+
+#默认postamen文件路径
+# default post man path is .//srcdata//name.json.collection
+#default csv file path is.//srcdata//test.csv
+BlueTest.testByCsvData("test") # this will produce the result
+```
+---
+```python
+BlueTest.initPostMan("test") #this will produce the csv file
+BlueTest.initPostMan("test",result_path=path) #specify the csv file path
+```
+
+```python
+BlueTest.testByCsvData("test") 
+#this will produce the result 
+BlueTest.testByCsvData("test",normal_test=True) #basic interface verification
+BlueTest.testByCsvData("test",normal_test=Fasle) #not verify the result
+BlueTest.testByCsvData("test",mkpy=True) 
+```
+---
+```python
+import requests
+url = "https://nbrecsys.4paradigm.com/action/api/log"
+querystring = {'requestID': 'Abac6ban', 'clientToken': '1f9d3d10b0ab404e86c2e61a935d3888'}
+payload = {"date":"2018-11-04 10:21:06","actions":[{"requestID":"2222","actionTime":1542248466944,"action":"show","sceneId":420,"userId":"xubyCjC6zO","itemId":"user_define","itemSetId":"39","uuid_tt_dd":"10_28867322960-222-222","specialType":"csdn_net_alliance_ads","ads":1}]}
+headers ={'Origin': ' https://blog.csdn.net',
+	 'User-Agent': ' Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36',
+	 'Content-Type': ' text/plain',
+	 'Accept': ' */*',
+	 'Referer': ' https://blog.csdn.net/qq_37159430/article/details/79970518',
+	 'Accept-Encoding': ' gzip, deflate, br',
+	 'Accept-Language': ' zh-CN,zh;q=0.8'}
+response = requests.request("POST", url, params=querystring,data=payload,)
+print(response.text)
+```
+
+The other function refer to :gun:
+
+
+
 # 简介
 :waxing_gibbous_moon:几个本质懒到家，却被工作压迫的人。为了降低自己的工作量，拍脑袋决定编写一个让小白也可以使用的测试库。一切的出发点都是几个懒人在实际工作中遇到的问题和场景。做这一切的目的是为了少做事。:waning_gibbous_moon:
 # 功能介绍
