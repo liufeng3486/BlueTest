@@ -180,7 +180,7 @@ body ={"date": "2018-11-04 10:10:10",
 	额外参数校验
 ----
 增加非接口文档约定参数进行校验。但是只在数据层级发生变化时进行校验。插入数据的键值均等于"test"
-范例数据只会进行一下几种情况的校验：
+范例数据只会进行以下几种情况的校验：
 
 1.
 url = "https://test/api/log?requestID=testid&clientToken=testtoken&test=test"
