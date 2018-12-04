@@ -177,7 +177,24 @@ body ={"date": "2018-11-04 10:10:10",
 参数长度校验范围为1-100000。
 
 ----
+	额外参数校验
+----
+增加非接口文档约定参数进行校验。但是只在数据层级发生变化时进行校验。插入数据的键值均等于"test"
+范例数据只会进行一下几种情况的校验：
+1.
+	url = "https://test/api/log?requestID=testid&clientToken=testtoken&test=test"
+	body ={"date": "2018-11-04 10:10:10",
+		"actions": [{"actionTime": 1542248466944}}
+2.
+url = "https://test/api/log?requestID=testid&clientToken=testtoken"
+body ={"date": "2018-11-04 10:10:10","test":"test",
+	"actions": [{"actionTime": 1542248466944]}}
+3.
+url = "https://test/api/log?requestID=testid&clientToken=testtoken"
+body ={"date": "2018-11-04 10:10:10",
+	"actions": [{"actionTime": 1542248466944,"test":"test"]}}
 
+----
 
 >接口性能测试
 待添加
@@ -239,6 +256,17 @@ BlueTest.initPostMan("test",result_path=path) #指定csv文件生成路径
 BlueTest.testByCsvData("test") #执行完成会生成相应结果
 BlueTest.testByCsvData("test",normal_test=True) #进行接口基础验证
 BlueTest.testByCsvData("test",normal_test=Fasle) #不进行接口基础验证
+```
+```python
+BlueTest.testByCsvData("test",limit_check=True,extras_check=True) #limit_check 进行参数长度校验 extras_check进行额外参数校验 输出结果如下
+```
+
+ exceptionCheck: ['requestID']为空 urlparams:True response:(True, '{"statuses":[{"ActionLogStatusCode":0}]}') 
+exceptionCheck: ['requestID']不传 urlparams:True response:(True, '{"statuses":[{"ActionLogStatusCode":0}]}') 
+extrasCheck: ['requestID'] 额外参数校验 response:(False, '{"code":3401,"info":"上传日志的时间错误","data":null}') 
+```python
+BlueTest.testByCsvData("test",mkpy=True) #生成接口py文件范例如下
+BlueTest.testByCsvData("test",mkpy=True) #生成接口py文件范例如下
 BlueTest.testByCsvData("test",mkpy=True) #生成接口py文件范例如下
 ```
 ---
