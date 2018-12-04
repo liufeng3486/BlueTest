@@ -40,6 +40,7 @@ def test():
         # time.sleep(1)
     BlueTest.initPostMan("test")
     BlueTest.testByCsvData("test")
+    # BlueTest.testByCsvData("test", limit_check=False, extras_check=True)
 def presstest():
     temp = ["temp1", "temp2", "temp3"]
     class press_2(BlueTest.SoloPress):

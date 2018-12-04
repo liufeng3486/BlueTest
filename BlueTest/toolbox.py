@@ -54,6 +54,7 @@ class Postman2Csv(object):
         null = PostParm.NULL
         with open(self.path,"r",encoding='utf8') as file: #读取文件会获取dict格式
             data = file.read()
+            data = data.replace(": ",":")
             data = eval(data)[PostParm.REQUESTS]
         all_data = []
         for solo_data in data: #便利数据
@@ -181,16 +182,19 @@ class Csv2Dict(object):
             data_temp.append(solo_data)
         return data_temp
     def header2Dict(self,header_string):
-        while header_string[-1] == "\n":
-            header_string =  header_string[:-1]
-        header_string =  '\''+header_string+'\''
-        header_string = header_string.replace("\n","\',\'")
-        header_string = header_string.replace(":", "\':\'")
-        header_string = header_string.replace("http\':\'//","http://")
-        header_string = header_string.replace("https\':\'//", "https://")
-        header_string = '{'+header_string+'}'
-        header_dict = eval(header_string)
-        return header_dict
+        try:
+            while header_string[-1] == "\n":
+                header_string =  header_string[:-1]
+            header_string =  '\''+header_string+'\''
+            header_string = header_string.replace("\n","\',\'")
+            header_string = header_string.replace(":", "\':\'")
+            header_string = header_string.replace("http\':\'//","http://")
+            header_string = header_string.replace("https\':\'//", "https://")
+            header_string = '{'+header_string+'}'
+            header_dict = eval(header_string)
+            return header_dict
+        except:
+            return {}
 class dict2Py(object):
     def __init__(self,data=""):
         self.data = data
@@ -311,7 +315,48 @@ def responseAssert(data,error_list=MainParam.ERROR_LIST):
             return "RESPONSE_FALSE"
     return "RESPONSE_TRUE"
 
-
+import datetime
+class ToolBox(object):
+    class TimeBox(object):
+        @staticmethod
+        def timetime2datetime(time_time):
+            return datetime.datetime.fromtimestamp(time.time())
+    class RequestBox(object):
+        @staticmethod
+        def responseAssert(data, error_list=MainParam.ERROR_LIST):
+            for error in error_list:
+                if error in str(data):
+                    return "RESPONSE_FALSE"
+            return "RESPONSE_TRUE"
+    class CsvBox(object):
+        @staticmethod
+        def printCsv(path):  # 打印csv现有内容
+            with open(path, newline='') as csvfile:
+                spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+                for row in spamreader:
+                    print(', '.join(row))
+        @staticmethod
+        def csvWrite(data, path):  # 写单行
+            with open(path, 'a', newline='') as csvfile:
+                spamwriter = csv.writer(csvfile, dialect='excel')
+                spamwriter.writerow(data)
+    class FileBox(object):
+        @staticmethod
+        def getFilePath(path, mode=1, spec_str=""):
+            #mode 1 当前目录下的所有非目录子文件
+            if mode == 1:
+                for root, dirs, files in os.walk(path):
+                    if root == path:
+                        if spec_str:
+                            temp_files = []
+                            for file in files:
+                                if spec_str in file:
+                                    temp_files.append(file)
+                            return temp_files
+                        else:
+                            return (files)
+            else:
+                raise "mode error"
 if __name__ == '__main__':
     getFilePath("./")
     pass
