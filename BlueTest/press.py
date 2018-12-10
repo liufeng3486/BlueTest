@@ -10,7 +10,7 @@ class SoloPress(threading.Thread):
     def __init__(self,lock,index="",path="",count=100):
         threading.Thread.__init__(self)
         if not path:
-            path = MainParam.Result_Path+MainParam.Press_File+str("presslog")+".log"
+            path = MainParam.Result_Path+MainParam.Press_File+str("press")+".log"
             # path = "./result/Press_%s.txt"%str(index)
         if not index:
             index = self.name.split("-")[-1]
