@@ -10,12 +10,13 @@ class SoloPress(threading.Thread):
     def __init__(self,lock,index="",path="",count=100):
         threading.Thread.__init__(self)
         if not path:
-            path = MainParam.Result_Path+MainParam.Press_File+str(index)+".txt"
+            path = MainParam.Result_Path+MainParam.Press_File+str("presslog")+".txt"
             # path = "./result/Press_%s.txt"%str(index)
         if not index:
             index = self.name.split("-")[-1]
         self.index = index
         self.path = path
+        # self.path = path
         self.count = count
         self.lock = lock
         self.file = open(str(path), "a+", encoding='utf8')
@@ -24,9 +25,11 @@ class SoloPress(threading.Thread):
     def file_write(self,*args):
         path = self.path
         temp = str(datetime.datetime.fromtimestamp(int(time.time())))+"\t"
-        for solo in args:
-            temp +="\t" + str(solo).replace("\n","")
-        self.file.write(temp + "\n")
+        if self.lock.acquire():
+            for solo in args:
+                temp +="\t" + str(solo).replace("\n","")
+            self.file.write(temp + "\n")
+        self.lock.release()
         # with open(str(path), "a+", encoding='utf8') as file:
         #     file.write(temp + "\n")
     def setup(self):
@@ -52,7 +55,9 @@ class SoloPress(threading.Thread):
                     self.lock.release()
                 self.start = time.time()
                 self.runcase()
+
                 self.file_write(MainParam.USETIME+"_"+str(int((time.time()-self.start)*1000)))
+
             except Exception as es:
                 self.file_write(str(self.index)+"\t"+str(es))
 
@@ -60,33 +65,35 @@ class Press(object):
     def __init__(self,num,step=1):
         self.num = num
         self.step = step
-    def dataReduction(self,path = MainParam.Result_Path):
+    def dataReduction(self,path = ""):
+        if not path:
+            path = MainParam.Result_Path +"Press_presslog.txt"
         press_files = toolbox.getFilePath(path, spec_str=MainParam.Press_File)
         time_dict = {}
         temp_resualt_dict = {}
         resualt_dict = {}
-        for press_file in press_files:
-            with open( MainParam.Result_Path + press_file, "r", encoding='utf8') as file:
-                for line in file.readlines():
-                    line = line.replace("\n", "")
-                    temp_list = line.split("\t")
-                    if MainParam.USETIME in  line:
-                        for i in temp_list:
-                            if MainParam.USETIME in i:
-                                try:
-                                    time_dict[i.split("_")[-1]] += 1
-                                except:
-                                    time_dict[i.split("_")[-1]] = 1
-                    if MainParam.RESPONSE_TRUE in line:
-                        try:
-                            temp_resualt_dict[temp_list[0]][0] += 1
-                        except:
-                            temp_resualt_dict[temp_list[0]] = [1, 0]
-                    if MainParam.RESPONSE_FALSE in line:
-                        try:
-                            temp_resualt_dict[temp_list[0]][1] += 1
-                        except:
-                            temp_resualt_dict[temp_list[0]] = [0, 1]
+        # for press_file in press_files:
+        with open( path, "r", encoding='utf8') as file:
+            for line in file.readlines():
+                line = line.replace("\n", "")
+                temp_list = line.split("\t")
+                if MainParam.USETIME in  line:
+                    for i in temp_list:
+                        if MainParam.USETIME in i:
+                            try:
+                                time_dict[i.split("_")[-1]] += 1
+                            except:
+                                time_dict[i.split("_")[-1]] = 1
+                if MainParam.RESPONSE_TRUE in line:
+                    try:
+                        temp_resualt_dict[temp_list[0]][0] += 1
+                    except:
+                        temp_resualt_dict[temp_list[0]] = [1, 0]
+                if MainParam.RESPONSE_FALSE in line:
+                    try:
+                        temp_resualt_dict[temp_list[0]][1] += 1
+                    except:
+                        temp_resualt_dict[temp_list[0]] = [0, 1]
         for key, value in temp_resualt_dict.items():
             resualt_dict[key] = value
         resualt_path = path+MainParam.RESUALT_CSV

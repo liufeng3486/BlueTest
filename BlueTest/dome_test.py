@@ -45,12 +45,12 @@ def presstest():
     temp = ["temp1", "temp2", "temp3"]
     class press_2(BlueTest.SoloPress):
         def setup(self):
-            self.num = temp[self.index - 1]
+            self.num = temp[0]
             self.count = 20
         def runcase(self):
             response = random.choice(["成功","失败"])
             self.file_write(str(self.num), response, BlueTest.toolbox.responseAssert(response))
-    press = BlueTest.Press(2)
+    press = BlueTest.Press(2000)
     press.run(press_2)
     press.dataReduction()
 def pressTestByCsv():
