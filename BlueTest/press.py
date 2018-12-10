@@ -10,7 +10,7 @@ class SoloPress(threading.Thread):
     def __init__(self,lock,index="",path="",count=100):
         threading.Thread.__init__(self)
         if not path:
-            path = MainParam.Result_Path+MainParam.Press_File+str("presslog")+".txt"
+            path = MainParam.Result_Path+MainParam.Press_File+str("presslog")+".log"
             # path = "./result/Press_%s.txt"%str(index)
         if not index:
             index = self.name.split("-")[-1]
@@ -67,7 +67,7 @@ class Press(object):
         self.step = step
     def dataReduction(self,path = ""):
         if not path:
-            path = MainParam.Result_Path +"Press_presslog.txt"
+            path = MainParam.Result_Path +"Press_press.log"
         press_files = toolbox.getFilePath(path, spec_str=MainParam.Press_File)
         time_dict = {}
         temp_resualt_dict = {}
