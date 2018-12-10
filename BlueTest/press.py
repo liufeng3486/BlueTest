@@ -18,6 +18,7 @@ class SoloPress(threading.Thread):
         self.path = path
         self.count = count
         self.lock = lock
+        self.file = open(str(path), "a+", encoding='utf8')
     # def assertResponse(self,data):
     #     for error in self
     def file_write(self,*args):
@@ -25,8 +26,9 @@ class SoloPress(threading.Thread):
         temp = str(datetime.datetime.fromtimestamp(int(time.time())))+"\t"
         for solo in args:
             temp +="\t" + str(solo).replace("\n","")
-        with open(str(path), "a+", encoding='utf8') as file:
-            file.write(temp + "\n")
+        self.file.write(temp + "\n")
+        # with open(str(path), "a+", encoding='utf8') as file:
+        #     file.write(temp + "\n")
     def setup(self):
         pass
 
