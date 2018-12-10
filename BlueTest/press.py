@@ -96,12 +96,12 @@ class Press(object):
                         temp_resualt_dict[temp_list[0]] = [0, 1]
         for key, value in temp_resualt_dict.items():
             resualt_dict[key] = value
-        resualt_path = path+MainParam.RESUALT_CSV
+        resualt_path = MainParam.Result_Path+MainParam.RESUALT_CSV
         toolbox.csvWrite(MainParam.RRESS_RESUALT_HEADER,resualt_path)
         for key,value in resualt_dict.items():
             toolbox.csvWrite([key, value[0],value[1]], resualt_path)
 
-        time_path = path+MainParam.TIME_CSV
+        time_path = MainParam.Result_Path+MainParam.TIME_CSV
         toolbox.csvWrite(MainParam.PRESS_TIME_HEADER,time_path)
         for key,value in time_dict.items():
             toolbox.csvWrite([key, value], time_path)
