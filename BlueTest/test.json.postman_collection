@@ -1,0 +1,31 @@
+{
+	"id": "3560d742-c3da-4ad7-32c1-74340031f242",
+	"name": "test",
+	"requests": [
+		{
+			"id": "49c2b90f-8ea7-c53e-910b-05a3c7014269",
+			"headers": "Origin: https://blog.csdn.net\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36\nContent-Type: text/plain\nAccept: */*\nReferer: https://blog.csdn.net/qq_37159430/article/details/79970518\nAccept-Encoding: gzip, deflate, br\nAccept-Language: zh-CN,zh;q=0.8\n",
+			"url": "https://nbrecsys.4paradigm.com/action/api/log?requestID=Abac6ban&clientToken=1f9d3d10b0ab404e86c2e61a935d3888",
+			"pathVariables": {},
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "3560d742-c3da-4ad7-32c1-74340031f242",
+			"data": [],
+			"dataMode": "raw",
+			"name": "testapi",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1542777522436,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\"date\":\"2018-11-04 10:21:06\",\"actions\":[{\"requestID\":\"Abac6ban\",\"actionTime\":1542248466944,\"action\":\"show\",\"sceneId\":420,\"userId\":\"xubyCjC6zO\",\"itemId\":\"user_define\",\"itemSetId\":\"39\",\"uuid_tt_dd\":\"10_28867322960-1540371130664-957382\",\"specialType\":\"csdn_net_alliance_ads\",\"ads\":1}]}"
+		}
+	],
+	"order": [
+		"49c2b90f-8ea7-c53e-910b-05a3c7014269"
+	],
+	"timestamp": 1542777522437
+}
