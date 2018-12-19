@@ -1,6 +1,6 @@
 null = "null"
 # from BlueTest.logInit import *
-import BlueTest,time,random
+import BlueTest,time,random,asyncio
 
 def test():
     with open(".//srcdata//test.json.postman_collection","w") as file:
@@ -50,7 +50,7 @@ def presstest():
         def runcase(self):
             response = random.choice(["成功","失败"])
             self.file_write(str(self.num), response, BlueTest.toolbox.responseAssert(response))
-    press = BlueTest.Press(2000)
+    press = BlueTest.Press(200)
     press.run(press_2)
     press.dataReduction()
 def pressTestByCsv():
@@ -72,6 +72,29 @@ def pressTestByCsv():
     press= BlueTest.Press(2)
     press.run(press_2)
     press.dataReduction()
+
+def pressAioTest():
+    class Test(BlueTest.SoloPressAsync):
+        async def setup(self, **kwargs):
+            kwargs["data"]["code"] = await self.queue.get()
+            return kwargs
+
+        def newQueue(self):
+            temp_list = []
+            for i in range(0, 1000000):
+                if len(str(i)) < 6:
+                    i = "0" * (6 - len(str(i))) + str(i)
+                temp_list.append(str(i))
+            queue = asyncio.Queue()
+            [queue.put_nowait(temp) for temp in temp_list]
+            self.queue = queue
+
+    new = Test("http://hq.sinajs.cn/list=sh600001", "Get", headers={"requestTime": "test","User-Agent":"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50 IE 9.0"},
+               vuser=50, total_num=200,
+               data={"code": "", "phone": "13111111111"})
+    new.mainrun()
+    new.dataReduction()
+
 
 if __name__ == '__main__':
     pass

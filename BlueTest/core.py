@@ -257,7 +257,6 @@ def initPostMan(name,result_path = ""):
         else:
             result_name = name.split(".")[0]
         result_path = "./srcdata/%s.csv"%result_name
-
     if not path:
         test = Postman2Csv("./srcdata/%s.json.postman_collection"%name,resultpath=result_path)
     else:

@@ -1,4 +1,4 @@
-import csv,re,os,copy
+import csv,re,os,copy,shutil
 import datetime
 # import toolbox
 def mkdir(path):
@@ -142,11 +142,10 @@ class Csv2Dict(object):
         return  data
 
     def readAll(self):
-
         print ("readall")
         try:
             temp_list = []
-            with open(self.path, newline='',encoding='utf8') as csvfile:
+            with open(self.path, newline='',encoding='utf-8') as csvfile:
                 spamreader = csv.reader(csvfile,dialect='excel')
                 for solo in spamreader:
                     temp_list.append(solo)
@@ -241,6 +240,17 @@ class dict2Py(object):
 class Base(object):
     def __init__(self):
         self.temp_map = []
+    @staticmethod
+    def executeCatch(fun):
+        def add_cap(*args, **kwargs):
+            try:
+                fun(*args, **kwargs)
+            except Exception as ex:
+                print('Error execute: %s' % fun.__name__)
+                print('Exception: %s' % ex)
+                print(kwargs)
+                return False
+        return add_cap
 
     def list_dictionary(self,dictionary, key_list=[]):
         if type(dictionary) == type({}):
@@ -319,6 +329,9 @@ import datetime
 class ToolBox(object):
     class TimeBox(object):
         @staticmethod
+        def test2():
+            print (self.test)
+        @staticmethod
         def timetime2datetime(time_time):
             return datetime.datetime.fromtimestamp(time.time())
     class RequestBox(object):
@@ -357,6 +370,9 @@ class ToolBox(object):
                             return (files)
             else:
                 raise "mode error"
+        @staticmethod
+        def fileCopy(src,des):
+            shutil.copyfile(src, des)
 if __name__ == '__main__':
-    getFilePath("./")
+    # getFilePath("./")
     pass
