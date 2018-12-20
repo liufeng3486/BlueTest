@@ -292,16 +292,16 @@ Demo说完，我们开始一步一步介绍，到底是如何工作的
  ``time.csv``
 
  .. figure:: _static/screenshots/dtailedsteps_timecsv.png
-:align: center
+    :align: center
 
 可以看到，左侧是根据请求耗时（毫秒）对请求进行的统计。当然，图中右边的图表需要大家使用excel手动生成。
 
  ``resualt.csv``
  
  .. figure:: _static/screenshots/dtailedsteps_resualtcsv.png
-:align: center
+    :align: center
  
- 时间轴变成了秒，并增加了成功与失败的统计。
+时间轴变成了秒，并增加了成功与失败的统计。
  
 在不进行调优的情况下，作为客户端可以看到的大部分内容，都已经包含在 ``resualt`` 和 ``time`` 中。服务端的数据，大家可以根据 ``resualt.csv`` 中的时间戳，从监控系统中获取相关服务端状态和日志。当然，建议大家还是骚扰相关管理员或者运维来获取相关内容。
 
