@@ -275,13 +275,16 @@ Demo大家看到了。除此以外， `BlueTest` 里，也自带了两个相关�
     
     >>>import BlueTest
     >>>BlueTest.Press(线程数)
+    
  
  除此之外，压力测试最重要的一点就是对执行数据的整理，因为这才是我们需要的。这才是最后测试报告里需要体现的内容。为此我们写了一个方法 ``dataReduction``
+ 
  
  **function dataReduction**
  
  这是 ``Class Press`` 中用来进行数据整理的方法。入参默认不填，或者填入你的压测结果路径 ``Press_press.log``。
  数据是基于三个维度进行的整理:
+ 
 * 自然时间流失过程中，接口请求的效率
 * 所有请求的耗时
 * 请求的成功率
