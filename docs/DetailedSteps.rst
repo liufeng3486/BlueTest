@@ -264,9 +264,9 @@ Demo大家看到了。除此以外， `BlueTest` 里，也自带了两个相关�
     >>>BlueTest.pressTestByCsv()
     end
     
- ``presstest()`` 执行肯定不会出现问题的，因为数据是我们随机生成的。但是 ``pressTestByCsv()`` 如果出问题的话.....放心，不会是大问题，耐心点
+``presstest()`` 执行肯定不会出现问题的，因为数据是我们随机生成的。但是 ``pressTestByCsv()`` 如果出问题的话.....放心，不会是大问题，耐心点
  
- Demo说完，我们开始一步一步介绍，到底是如何工作的
+Demo说完，我们开始一步一步介绍，到底是如何工作的
  
  **Class Press**
  
