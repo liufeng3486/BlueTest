@@ -262,6 +262,7 @@ Demo大家看到了。除此以外， `BlueTest` 里，也自带了两个相关�
     >>>import BlueTest
     >>>BlueTest.presstest()
     >>>BlueTest.pressTestByCsv()
+    end
     
  ``presstest()`` 执行肯定不会出现问题的，因为数据是我们随机生成的。但是 ``pressTestByCsv()`` 如果出问题的话.....放心，不会是大问题，耐心点
  
@@ -272,18 +273,16 @@ Demo大家看到了。除此以外， `BlueTest` 里，也自带了两个相关�
  大家可以理解为，这是一个多线程的盒子，它自动生成多线程（我们最讨厌的东西）。实例化这个类的时候。就直接确定了，产生的线程数
  
 .. code-block:: python
-    
+
     >>>import BlueTest
     >>>BlueTest.Press(线程数)
     
- 
- 除此之外，压力测试最重要的一点就是对执行数据的整理，因为这才是我们需要的。这才是最后测试报告里需要体现的内容。为此我们写了一个方法 ``dataReduction``
- 
+除此之外，压力测试最重要的一点就是对执行数据的整理，因为这才是我们需要的。这才是最后测试报告里需要体现的内容。为此我们写了一个方法 ``dataReduction``
  
  **function dataReduction**
  
- 这是 ``Class Press`` 中用来进行数据整理的方法。入参默认不填，或者填入你的压测结果路径 ``Press_press.log``。
- 数据是基于三个维度进行的整理:
+这是 ``Class Press`` 中用来进行数据整理的方法。入参默认不填，或者填入你的压测结果路径 ``Press_press.log``。
+数据是基于三个维度进行的整理:
  
 * 自然时间流失过程中，接口请求的效率
 * 所有请求的耗时
