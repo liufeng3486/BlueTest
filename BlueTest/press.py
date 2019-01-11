@@ -122,7 +122,7 @@ class Press(object):
             t.setup()
             ThreadList.append(t)
         for t in ThreadList:
-            self.runSleep()
+            # self.runSleep()
             t.start()
         for t in ThreadList:
             t.join()

@@ -90,12 +90,15 @@ def pressAioTest():
             self.queue = queue
 
     new = Test("http://hq.sinajs.cn/list=sh600001", "Get", headers={"requestTime": "test","User-Agent":"Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50 IE 9.0"},
-               vuser=50, total_num=200,
+               vuser=500, total_num=2000,
                data={"code": "", "phone": "13111111111"})
     new.mainrun()
     new.dataReduction()
 
-
 if __name__ == '__main__':
-    pass
-    # test()
+    new = Test("http://hq.sinajs.cn/list=sh600001", "Get", headers={"requestTime": "test",
+                                                                    "User-Agent": "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-us) AppleWebKit/534.50 (KHTML, like Gecko) Version/5.1 Safari/534.50 IE 9.0"},
+               vuser=500, total_num=2000,
+               data={"code": "", "phone": "13111111111"})
+    new.mainrun()
+    new.dataReduction()
