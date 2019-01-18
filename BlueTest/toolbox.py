@@ -1,5 +1,8 @@
 import csv,re,os,copy,shutil
 import datetime
+from Crypto import Random
+from Crypto.PublicKey import RSA
+from Crypto.Cipher import PKCS1_v1_5
 # import toolbox
 def mkdir(path):
     folder = os.path.exists(path)
@@ -373,6 +376,56 @@ class ToolBox(object):
         @staticmethod
         def fileCopy(src,des):
             shutil.copyfile(src, des)
+
+
+
+    class RsaFile:
+        def creatKeys(private="private.pem", public="public.pem"):
+            random_generator = Random.new().read
+            rsa = RSA.generate(1024, random_generator)
+            private_pem = rsa.exportKey()
+            public_pem = rsa.publickey().exportKey()
+            with open(private, 'wb') as file:
+                file.write(private_pem)
+            with open(public, 'wb') as file:
+                file.write(public_pem)
+
+        def rsaEncrypt(key_path, soure_file, enccrypt_file="Encrypt", length=100):
+            with open(key_path, "r") as f:
+                key = f.read()
+                key = RSA.importKey(key)
+                key = PKCS1_v1_5.new(key)
+            res = []
+            with open(soure_file, "rb") as file:
+                msg = file.read()
+                for i in range(0, len(msg), length):
+                    res.append(key.encrypt(msg[i:i + length]))
+            with open(enccrypt_file, "wb") as file:
+                for i in res:
+                    file.write(i)
+            return True
+
+        def rsaDecrypt(key_path, soure_file, decrypt_file, length=128):
+            with open(key_path, "r") as f:
+                key = f.read()
+                key = RSA.importKey(key)
+                key = PKCS1_v1_5.new(key)
+            res = []
+            with open(soure_file, "rb") as file:
+                msg = file.read()
+                for i in range(0, len(msg), length):
+                    res.append(key.decrypt(msg[i:i + length], 'xyz'))
+            with open(decrypt_file, "wb") as file:
+                for i in res:
+                    file.write(i)
+            return True
+
+    # if __name__ == '__main__':
+    #     RsaFile.creatKeys()  # 生成kyes 默认名称'public.pem 'private.pem
+    #     RsaFile.rsaEncrypt('public.pem', 'a.xlsx')  # public.pem生成的公钥，a.xlsx加密文件,默认加密后文件名Encrypt
+    #     RsaFile.rsaDecrypt('private.pem', "Encrypt", "dfc.xlsx")  # private.pem私钥文件,Encrypt需要解密的文件，dfc.xlsx解密后文件
+
+
 if __name__ == '__main__':
     # getFilePath("./")
     pass

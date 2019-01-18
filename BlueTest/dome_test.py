@@ -94,6 +94,11 @@ def pressAioTest():
                data={"code": "", "phone": "13111111111"})
     new.mainrun()
     new.dataReduction()
+def rsafileTest():
+    from BlueTest.toolbox import ToolBox as toolbox
+    toolbox.RsaFile.creatKeys()
+    toolbox.RsaFile.rsaEncrypt('public.pem', 'a.xlsx')  # public.pem生成的公钥，a.xlsx加密文件,默认加密后文件名Encrypt
+    toolbox.RsaFile.rsaDecrypt('private.pem', "Encrypt", "dfc.xlsx")  # private.pem私钥文件,Encrypt需要解密的文件，dfc.xlsx解密后文件
 
 if __name__ == '__main__':
     new = Test("http://hq.sinajs.cn/list=sh600001", "Get", headers={"requestTime": "test",
