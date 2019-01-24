@@ -1,8 +1,9 @@
 import csv,re,os,copy,shutil
 import datetime
-from Crypto import Random
-from Crypto.PublicKey import RSA
-from Crypto.Cipher import PKCS1_v1_5
+# from Crypto import Random
+# from Crypto.PublicKey import RSA  #https = http+ssl  ssl = rsa
+# from Crypto.Cipher import PKCS1_v1_5
+
 # import toolbox
 def mkdir(path):
     folder = os.path.exists(path)
@@ -337,6 +338,11 @@ class ToolBox(object):
         @staticmethod
         def timetime2datetime(time_time):
             return datetime.datetime.fromtimestamp(time.time())
+        @staticmethod
+        def datetimePlus(src_datetime,**kwargs): # 对时间增加某个增量
+            plus = datetime.timedelta(**kwargs)
+            src_datetime += plus
+            return src_datetime
     class RequestBox(object):
         @staticmethod
         def responseAssert(data, error_list=MainParam.ERROR_LIST):
@@ -428,4 +434,5 @@ class ToolBox(object):
 
 if __name__ == '__main__':
     # getFilePath("./")
-    pass
+    RsaFile.creatKeys()
+
