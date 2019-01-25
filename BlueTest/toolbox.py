@@ -19,11 +19,13 @@ from BlueTest.parm import *
 
 class Postman2Csv(object):
 
-    def __init__(self,path,resultpath="./srcdata/temp.csv"):
+    def __init__(self,path,resultpath="./srcdata/temp.csv",encode=""):
         self.path = path
         self.resultpath = resultpath #结果路径
         self.header = csv_parm.CHINA_KEY #中文key
         self.key =  csv_parm.KEY #key
+        self.encode = encode
+
     def run(self):
         # try:
             data = self.getData()
@@ -34,9 +36,15 @@ class Postman2Csv(object):
         #     log.logger.error(es)
 
     def csvWrite(self,data): #写单行
-        with open(self.resultpath, 'a', newline='') as csvfile:
-            spamwriter = csv.writer(csvfile,dialect='excel')
-            spamwriter.writerow(data)
+        if self.encode:
+            with open(self.resultpath, 'a', newline='',encoding=self.encode) as csvfile:
+                spamwriter = csv.writer(csvfile, dialect='excel')
+                spamwriter.writerow(data)
+        else:
+            with open(self.resultpath, 'a', newline='') as csvfile:
+                spamwriter = csv.writer(csvfile,dialect='excel')
+                spamwriter.writerow(data)
+
 
     def printCsv(self): #打印csv现有内容
         with open(self.path, newline='') as csvfile:

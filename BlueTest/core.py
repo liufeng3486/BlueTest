@@ -12,7 +12,7 @@ import requests,random,time
 
 
 class apiTest(object):
-    def __init__(self,data):
+    def __init__(self,data,encode=""):
         self.data = data
         self.min = 5
         self.max = 10000
@@ -21,7 +21,7 @@ class apiTest(object):
         self.method = self.data[csv_parm.METHOD]
         self.name = self.data[csv_parm.NAME]
         self.error_list = ["error","Error","False","false","失败","错误","异常","禁止"]
-
+        self.encode=encode
     def recordResults(self,data):
         mkdir("./result/")
         with open("./result/data.txt","a",encoding='utf8') as file:
@@ -54,6 +54,11 @@ class apiTest(object):
             payload = payload.replace(" '", "\"").replace("' ", "\"").replace("'", "\"")
 
         # with requests.request(method=self.method, url=self.url, params=body) as response:
+        if self.encode:
+            if type(querystring) == str:
+                querystring = querystring.encode(self.encode)
+            if type(payload) == str :
+                payload = payload.encode(self.encode)
         with requests.request(method=self.method,url=self.url, params=querystring,data=payload,headers =self.headers) as response :
             state = False
             for error in error_list:
@@ -246,7 +251,7 @@ class apiTest(object):
                         temp_len = len(key)
                         self.extrasCheck(body,key)
 
-def initPostMan(name,result_path = ""):
+def initPostMan(name,result_path = "",encode=""):
     path = ""
     result_name = ""
     if "\\" in name or "/" in name or "//" in name:
@@ -258,12 +263,12 @@ def initPostMan(name,result_path = ""):
             result_name = name.split(".")[0]
         result_path = "./srcdata/%s.csv"%result_name
     if not path:
-        test = Postman2Csv("./srcdata/%s.json.postman_collection"%name,resultpath=result_path)
+        test = Postman2Csv("./srcdata/%s.json.postman_collection"%name,resultpath=result_path,encode=encode)
     else:
-        test = Postman2Csv(path,resultpath=result_path)
+        test = Postman2Csv(path,resultpath=result_path,encode=encode)
     test.run()
 
-def testByCsvData(name,normal_test=True,mkpy=False,limit_check = False,extras_check=True):
+def testByCsvData(name,normal_test=True,mkpy=False,limit_check = False,extras_check=True,encode=""):
     """test API by csv data
 
         :param name: csv name or csv path.
@@ -292,7 +297,7 @@ def testByCsvData(name,normal_test=True,mkpy=False,limit_check = False,extras_ch
             if mkpy:
                 temp = dict2Py(data=i)
                 temp.mkpy()
-            test = apiTest(i)
+            test = apiTest(i,encode=encode)
             test.dataReduction(1,limitcheck=limit_check,extras_check=extras_check)
 
 if __name__ == '__main__':
