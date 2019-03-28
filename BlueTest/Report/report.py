@@ -22,6 +22,8 @@ class Report():
         self.failure_count = 0
         self.error_count = 0
         self.tester = "Temp"
+        self.start_time = ""
+        self.use_time = ""
         self.passrate = float(0)
 
     def Arrangement(self):
@@ -57,8 +59,8 @@ class Report():
             status = 'none'
         return [
             ('测试人员', self.tester),
-            ('开始时间',"startTime"),
-            ('合计耗时',"duration"),
+            ('开始时间',self.start_time),
+            ('合计耗时',self.use_time),
             ('测试结果',status + "，通过率= "+self.passrate),
         ]
 

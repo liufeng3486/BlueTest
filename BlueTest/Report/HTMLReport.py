@@ -305,6 +305,7 @@ class HTMLTestRunner(Template_mixin):
         stylesheet = self._generate_stylesheet()
         heading = self._generate_heading(report_attrs)
         report = self._generate_report(result)
+        # report += REPORT_TMPL2
         ending = self._generate_ending()
         output = self.HTML_TMPL % dict(
             title = saxutils.escape(self.title),
