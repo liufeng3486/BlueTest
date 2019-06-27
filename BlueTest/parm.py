@@ -24,6 +24,7 @@ class PostParm:
     TRUE = True
     NULL = "null"
     REQUESTS = "requests"
+    REQUEST = "request"
     URL = "url"
     NAME = "name"
     METHOD = "method"

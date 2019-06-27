@@ -26,10 +26,11 @@ class Postman2Csv(object):
         self.key =  csv_parm.KEY #key
         self.encode = encode
 
+
     def run(self):
         # try:
-            data = self.getData()
-            self.write2Csv(data)
+            data = self.getData() #数据结构确定
+            self.write2Csv(data) 
             log.logger.info("postman转csv成功:%s"%self.resultpath)
         # except Exception as es:
         #     log.logger.error("postman转csv失败")
@@ -64,12 +65,43 @@ class Postman2Csv(object):
         false = PostParm.FALSE    #初始化特殊字符
         true = PostParm.TRUE
         null = PostParm.NULL
+
+        src_datas = []
         with open(self.path,"r",encoding='utf8') as file: #读取文件会获取dict格式
             data = file.read()
+
+            data = data.replace("[]","\"\"")
+
             data = data.replace(": ",":")
-            data = eval(data)[PostParm.REQUESTS]
+
+
+
+            try:
+                src_datas = eval(data)[PostParm.REQUESTS]
+            except:
+                try:
+                    data_temp = eval(data)["item"]
+                    for solo in data_temp:
+                        data_use = solo
+                        
+                        data = data_use[PostParm.REQUEST]
+                        
+                        data[PostParm.URL]=data["url"]["raw"]
+                        if "https" not in data[PostParm.URL]:
+                            data[PostParm.URL] = "http://" + data[PostParm.URL]
+                        
+                        data["name"] = data_use["name"]
+                        data["headers"]=data["header"]
+                        data["data"] = data["body"][data["body"]["mode"]]
+                        data[PostParm.DATATYPE] = data["body"]["mode"]
+                        data[PostParm.RAWMODEDATA] = data["data"]
+                        src_datas.append(data)
+
+                except:
+                    raise "data error"
         all_data = []
-        for solo_data in data: #便利数据
+        # src_datas = [data,]
+        for solo_data in src_datas: #便利数据
             url = solo_data[PostParm.URL]
             url_list  = url.split("?")[0].split("/") #拆解url 获取path路径list
             url_parm = ""
@@ -110,6 +142,8 @@ class Postman2Csv(object):
                 temp_list[code_parm.DATA] = solo_data[PostParm.RAWMODEDATA]
             all_data.append(temp_list)
         return all_data
+    
+
 from BlueTest.logInit import *
 class Csv2Dict(object):
 
@@ -126,14 +160,15 @@ class Csv2Dict(object):
             log.logger.debug("CSV文件内容序列化成功:%s",str(dict_data))
             return dict_data
         else:
-            try:
+            # try:
                 data = self.readAll()
+                print(data)
                 dict_data = self.list2Dict(data)
                 log.logger.debug("CSV文件内容序列化成功:%s", str(dict_data))
                 return dict_data
-            except Exception as ex:
-                log.logger.error("CSV文件内容序列化失败:%s", str(ex))
-                return False
+            # except Exception as ex:
+            #     log.logger.error("CSV文件内容序列化失败:%s", str(ex))
+            #     return False
 
     def urlParamsDo(self,urlparams_string):
         if urlparams_string:
@@ -141,6 +176,9 @@ class Csv2Dict(object):
             params_list = urlparams_string.split("&")
 
             for solo_param in params_list:
+                # print(solo_param)
+                if("="not in solo_param):
+                    solo_param += "="
                 urlparams[solo_param.split("=")[0]]=solo_param.split("=")[1]
             return urlparams
         return urlparams_string
@@ -182,9 +220,12 @@ class Csv2Dict(object):
                 continue
             if value == [PostParm.START] or value[0] == PostParm.START:
                 start_list.append(index)
+                
         for index in start_list:
+            # print(index,start_list)
             solo_data = {}
             for sub_index,key in enumerate(data[index+1]):
+                
                 solo_data[key] = data[index+2][sub_index]
             solo_data[csv_parm.HEADERS] = self.header2Dict(solo_data[csv_parm.HEADERS])
             solo_data[csv_parm.URLPARAMS] = self.urlParamsDo(solo_data[csv_parm.URLPARAMS] )
@@ -196,6 +237,15 @@ class Csv2Dict(object):
         try:
             while header_string[-1] == "\n":
                 header_string =  header_string[:-1]
+
+            if "[" == header_string[0] and "]"== header_string[-1]:
+                header_new = eval(header_string)
+                header_temp = {}
+                for solo in header_new:
+                    header_temp[solo["key"]] = solo["value"]
+                return header_temp
+
+
             header_string =  '\''+header_string+'\''
             header_string = header_string.replace("\n","\',\'")
             header_string = header_string.replace(":", "\':\'")

@@ -17,6 +17,8 @@ class apiTest(object):
         self.min = 5
         self.max = 10000
         self.headers = self.data[csv_parm.HEADERS]
+
+
         self.url = self.data[csv_parm.URL]
         self.method = self.data[csv_parm.METHOD]
         self.name = self.data[csv_parm.NAME]
@@ -25,8 +27,10 @@ class apiTest(object):
     def recordResults(self,data):
         mkdir("./result/")
         with open("./result/data.txt","a",encoding='utf8') as file:
-            file.write("%s \n"%(data))
+            file.write("%s \n"%(data)+"\n")
         log.logger.info("%s \n"%(data))
+
+
     def responseAssert(self,data,error_list=False):
         if not error_list:
             error_list = self.error_list
@@ -143,6 +147,7 @@ class apiTest(object):
             spec_response = self.soloRequest(urlparams=body)
         else:
             spec_response = self.soloRequest(body)
+
         log.logger.debug(body)
         self.recordResults(
             "%s exceptionCheck: 普通请求 urlparams:%s response:%s" % (self.name, str(urlparams), spec_response))
@@ -208,6 +213,7 @@ class apiTest(object):
 
     def dataReduction(self,data,limitcheck=True,extras_check=True):
         self.headers = self.data[csv_parm.HEADERS]
+        print(self.headers)
         self.url = self.data[csv_parm.URL]
         self.method = self.data[csv_parm.METHOD]
         self.name = self.data[csv_parm.NAME]
@@ -266,6 +272,9 @@ def initPostMan(name,result_path = "",encode=""):
         test = Postman2Csv("./srcdata/%s.json.postman_collection"%name,resultpath=result_path,encode=encode)
     else:
         test = Postman2Csv(path,resultpath=result_path,encode=encode)
+
+        
+
     test.run()
 
 def testByCsvData(name,normal_test=True,mkpy=False,limit_check = False,extras_check=True,encode=""):
