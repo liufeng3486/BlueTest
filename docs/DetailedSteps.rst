@@ -10,7 +10,8 @@ DetailedSteps
    * ``toolbox.py`` 工具箱
    * ``dome_test.py`` 范例
    * ``core.py`` 接口基础测试相关
- 
+   * ``YApi2Csv.py`` YAPI 一键转换为csv
+   
 
 准备数据 
 ------
@@ -42,7 +43,7 @@ DetailedSteps
 调用方式可以有以下几种
 
 .. code-block:: python
-
+    
     BlueTest.initPostMan(name = "文件名缩写")  #test.json.postman_collection 则只需要 initPostMan（"test"）
     BlueTest.initPostMan(name = "文件完整路径") #完整的文件相对路径/绝对路径
     BlueTest.initPostMan(name = "文件名缩写",result_path = "转换后文件路径") 
@@ -95,6 +96,23 @@ write2Csv = =  write to csv 。如果你还看不明白含义，那么不是你�
 
 在这两个标志位以内就是一个测试用例，在这两个标志位以外的区域可以任由大家进行备注，而不影响测试用例。也算是在可读性和易读性之间的一种平衡。以上的工作搞定之后，如果你幸运的没有出现异常，那么测试数据的准备工作已经全部完成了
 
+**function initYApi2Csv**
+标准 ``YAPI`` 一键转换为 ``csv``
+.. code-block:: python
+    BlueTest.initYApi2Csv(projects,csvname,apipath,api_user,api_pwd,project_url,login_path,user,pwd,tmp)
+    # projects 需要生成csv文件的项目id
+    # csvname 写入的csv文件名称
+    # apipath Yapi的域名
+    # api_user Yapi登录用户名
+    # api_pwd Yapi登录密码
+    # project_url 项目域名
+    # login_path 项目登录path
+    # user 项目登录用户名
+    # pwd 项目登录密码
+    # tmp 可能会缺少的path
+    
+生成的csv文件在``./srcdata``目录下，内容同BlueTest.Postman2Csv生成文件一致。
+
 接口测试
 ------
 由于每个人，每个部门，每个公司的业务需求千奇百怪，所以，作为一个通用性的库。故我们暂时不考虑这些特性的东西。先把共性的问题解决。比如 ``值为空`` ``键值均为空`` ``额外参数校验`` ``参数长度校验`` 
@@ -108,14 +126,25 @@ write2Csv = =  write to csv 。如果你还看不明白含义，那么不是你�
 
  .. code-block:: python
 
-    BlueTest.testByCsvData(name,normal_test=True,mkpy=False,limit_check = False,extras_check=True)
+    BlueTest.testByCsvData(name,normal_test=True,mkpy=False,limit_check = False,extras_check=True,encode="",case_type="",counter=True,need=0)
     # csv 名称（test.csv->testByCsvData("test") ） or 绝对路径/相对路径 (testByCsvData("./tmp/test.csv") )
     # normal_test 基础测试 
     # mkpy实时生成单接口.py文件
     # limit_check 参数长度校验
     # extras_check额外参数校验
+    # case_type="HeartTest" 只进行普通请求校验
+    # need=n 从第n个需要执行的用例开始执行
 
-* 执行结束之后。恭喜你，做完了。去 ``./result/data.txt`` 里看结果吧
+* 执行结束之后。恭喜你，做完了。去 ``./result/data.txt`` 里看结果吧。
+* 想要自动分析执行结果，查看``./result/result_error.txt``，如执行结果内不包含"0x000000"，会写入到该文件，包含接口请求地址、返回code、http响应code、message信息、type错误类型等。
+
+type错误类型
+* 错误信息不明确：返回数据为空
+* 服务不存在：http_code返回500
+* 缺少参数或参数不正确：参数问题
+* 业务性问题：由于业务特殊性造成，可忽略
+* 其他:404,网络异常,PHPerror，未知错误，接口异常等
+
 
 收起你一脸蒙蔽的表情，没错。做完了。整理数据，去发测试报告吧！但是如何执行的，你肯定很好奇。我们再次一步一步来。
 
@@ -177,7 +206,7 @@ write2Csv = =  write to csv 。如果你还看不明白含义，那么不是你�
     >>>import BlueTest
     >>>apitest = BlueTest.ApiTest(data)
     
-还是一样，从csv里抽一条数据作为入参，来实例化基类。在基类的构造函数来里可以看到，里面对接口的一些测试标准进行了配置。，而且一切的初始化都是基于 ``param.py`` ,详细的配置内容，请自行查看相关文件。
+还是一样，从csv里抽一条数据作为入参，来实例化基类。在基类的构造函数来里可以看到，里面对接口的一些测试标准进行了配置。而且一切的初始化都是基于 ``param.py`` ,详细的配置内容，请自行查看相关文件。
 
 在实例化获得 ``apitest`` 后，众所周知，构造函数已经运行了。这个时候。我们的数据准备已经完成。
 执行具体的接口校验工作的方法有 ``limitCheck`` (长度校验) ``exceptionCheck`` (空校验) ``extrasCheck`` (额外参数校验)。
@@ -335,11 +364,7 @@ Demo说完，我们开始一步一步介绍，到底是如何工作的
 **function run** 
 
 按照正常情况，run函数是类实例化后的主执行函数。所以在这里。我们做了单线程的接口调用。除了执行规定次数的 ``runCase`` 外，还进行了一些其他辅助类的工作，比如:线程执行的进度展示，执行数据的记录... 听上去是一些无关紧要的东西。但是却能提高很多用户体验，毕竟，谁也不想执行代码后，只能经过一段没有进度的等待，获得一堆没有规划好的数据。
-
-
-
-
-                
+           
     
     
 
