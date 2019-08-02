@@ -97,9 +97,12 @@ write2Csv = =  write to csv 。如果你还看不明白含义，那么不是你�
 在这两个标志位以内就是一个测试用例，在这两个标志位以外的区域可以任由大家进行备注，而不影响测试用例。也算是在可读性和易读性之间的一种平衡。以上的工作搞定之后，如果你幸运的没有出现异常，那么测试数据的准备工作已经全部完成了
 
 **function initYApi2Csv**
+
 标准 ``YAPI`` 一键转换为 ``csv``
-.. code-block:: python
+
+ .. code-block:: python
     BlueTest.initYApi2Csv(projects,csvname,apipath,api_user,api_pwd,project_url,login_path,user,pwd,tmp)
+    
     # projects 需要生成csv文件的项目id
     # csvname 写入的csv文件名称
     # apipath Yapi的域名
@@ -139,6 +142,7 @@ write2Csv = =  write to csv 。如果你还看不明白含义，那么不是你�
 * 想要自动分析执行结果，查看``./result/result_error.txt``，如执行结果内不包含"0x000000"，会写入到该文件，包含接口请求地址、返回code、http响应code、message信息、type错误类型等。
 
 type错误类型
+
 * 错误信息不明确：返回数据为空
 * 服务不存在：http_code返回500
 * 缺少参数或参数不正确：参数问题
